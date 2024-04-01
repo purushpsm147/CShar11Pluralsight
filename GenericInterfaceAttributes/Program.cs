@@ -2,7 +2,6 @@
 using GenericInterfaceAttributes.Attributes;
 using GenericInterfaceAttributes.StaticAbstractInterfaces;
 using System.Numerics;
-using System.Reflection;
 
 Console.WriteLine("Hello, World!");
 
@@ -12,10 +11,10 @@ var baseUrl = IRequestConfig.Url;
 var request = new Request();
 request.DoRequest<GetRequestToSomeURL>();
 
-double[] doubles = { 1.0, 2.0, 3.0, 4.0, 5.0 };
+double[] doubles = [1.0, 2.0, 3.0, 4.0, 5.0];
 //var sum = doubles.Sum();
 var sum = AddAll(doubles);
-int[] ints = { 1, 2, 3, 4, 5 };
+int[] ints = [1, 2, 3, 4, 5];
 //var sumInts = ints.Sum();
 var sumInts = AddAll(ints);
 Console.WriteLine($"Sum of doubles: {sum}");
@@ -26,8 +25,8 @@ static T AddAll<T>(params T[] values) where T : INumber<T>
     T sum = T.Zero;
     T one = T.One;
     T max = T.Max(one, sum);
-    T min = T.Min(one, sum);
-    T abs = T.Abs(sum);
+    T min = T.Min(one, max);
+    T abs = T.Abs(min);
     foreach (var value in values)
     {
         sum += value;
@@ -50,6 +49,9 @@ bool ValidateMapPoint(MapPoint mapPoint)
 
     var coordinateValidator = GetValidator<MapPoint, string>(nameof(mapPoint.GpsCoordinates));
     var gpsCoordinatesResult = coordinateValidator.Validate(mapPoint.GpsCoordinates);
+
+    var calculatedDistanceValidator = GetValidator<MapPoint, int>(nameof(mapPoint.Altitude));
+    var altitudeResult = calculatedDistanceValidator.Validate(mapPoint.Altitude);
 
     return nearestCityResult && gpsCoordinatesResult;
 }
