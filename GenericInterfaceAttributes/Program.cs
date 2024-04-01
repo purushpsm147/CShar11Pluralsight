@@ -1,6 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using GenericInterfaceAttributes.Attributes;
 using GenericInterfaceAttributes.StaticAbstractInterfaces;
 using System.Numerics;
+using System.Reflection;
 
 Console.WriteLine("Hello, World!");
 
@@ -31,4 +33,35 @@ static T AddAll<T>(params T[] values) where T : INumber<T>
         sum += value;
     }
     return sum;
+}
+
+var mapPoint = new MapPoint
+{
+    NearestCity = "STOCKHOLM",
+    GpsCoordinates = "59° 20' 4.5276'' N, 18° 3' 47.6640'' E"
+};
+
+var result = ValidateMapPoint(mapPoint);
+
+bool ValidateMapPoint(MapPoint mapPoint)
+{
+    var cityValidator = GetValidator<MapPoint>(nameof(mapPoint.NearestCity));
+    var nearestCityResult = cityValidator.Validate(mapPoint.NearestCity);
+
+    var coordinateValidator = GetValidator<MapPoint>(nameof(mapPoint.GpsCoordinates));
+    var gpsCoordinatesResult = coordinateValidator.Validate(mapPoint.GpsCoordinates);
+
+    return nearestCityResult && gpsCoordinatesResult;
+}
+
+IValidator GetValidator<T>(string property)
+{
+    var validatorType = typeof(T)
+                        .GetProperty(property)
+                        .GetCustomAttributes(typeof(ValidateAttribute<>))
+                        .GetType()
+                        .GenericTypeArguments.First();
+
+    return Activator.CreateInstance(validatorType) as IValidator;
+
 }
