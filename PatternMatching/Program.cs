@@ -57,3 +57,20 @@ if(ints is [1 or 2, _, <5, ..])
 {
     Console.WriteLine("match");
 }
+
+var s = "ChatGPT";
+
+if(s is ['C' or 'c', .. { Length: 7 }])
+{
+    Console.WriteLine("match");
+}
+
+ReadOnlySpan<char> s1 = "CoPilot";
+if(s1 is ['C' or 'c', _, _, _, _, _, _])
+{
+    Console.WriteLine("match");
+}
+
+var filteredInts = ints.Where(GreatherThanTwo);
+
+static bool GreatherThanTwo(int x) => x > 2;
