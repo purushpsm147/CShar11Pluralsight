@@ -2,8 +2,8 @@
 
 public class MapPoint
 {
-    [Validate<CityValidator>]
+    [Validate<CityValidator, string>(new CityValidator())]
     public string NearestCity { get; set; }
-    [Validate<CoordinateValidator>]
+    [Validate<CoordinateValidator, string>(new CoordinateValidator())]
     public string GpsCoordinates { get; set; }
 }

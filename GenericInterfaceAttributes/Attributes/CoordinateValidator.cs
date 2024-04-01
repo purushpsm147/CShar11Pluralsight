@@ -1,6 +1,6 @@
 ﻿namespace GenericInterfaceAttributes.Attributes;
 
-public class CoordinateValidator : IValidator
+public class CoordinateValidator : IValidator<string>
 {
     public bool Validate(string input)
     {

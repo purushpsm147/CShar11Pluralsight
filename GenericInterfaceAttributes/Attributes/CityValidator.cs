@@ -1,6 +1,6 @@
 ﻿namespace GenericInterfaceAttributes.Attributes;
 
-internal class CityValidator : IValidator
+public class CityValidator : IValidator<string>
 {
     public bool Validate(string input)
     {

@@ -1,6 +1,6 @@
 ﻿namespace GenericInterfaceAttributes.Attributes;
 
-public interface IValidator
+public interface IValidator<T>
 {
-    bool Validate(string input);
+    bool Validate(T input);
 }

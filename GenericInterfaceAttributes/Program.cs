@@ -45,23 +45,22 @@ var result = ValidateMapPoint(mapPoint);
 
 bool ValidateMapPoint(MapPoint mapPoint)
 {
-    var cityValidator = GetValidator<MapPoint>(nameof(mapPoint.NearestCity));
+    var cityValidator = GetValidator<MapPoint, string>(nameof(mapPoint.NearestCity));
     var nearestCityResult = cityValidator.Validate(mapPoint.NearestCity);
 
-    var coordinateValidator = GetValidator<MapPoint>(nameof(mapPoint.GpsCoordinates));
+    var coordinateValidator = GetValidator<MapPoint, string>(nameof(mapPoint.GpsCoordinates));
     var gpsCoordinatesResult = coordinateValidator.Validate(mapPoint.GpsCoordinates);
 
     return nearestCityResult && gpsCoordinatesResult;
 }
 
-IValidator GetValidator<T>(string property)
+IValidator<TProperty> GetValidator<T, TProperty>(string property)
 {
     var validatorType = typeof(T)
                         .GetProperty(property)
-                        .GetCustomAttributes(typeof(ValidateAttribute<>))
-                        .GetType()
-                        .GenericTypeArguments.First();
+                        .GetCustomAttributes(typeof(ValidateAttribute<,>), false)
+                        .FirstOrDefault() as ValidateAttribute<IValidator<TProperty>, TProperty>;
 
-    return Activator.CreateInstance(validatorType) as IValidator;
+    return validatorType?.Validator;
 
 }
