@@ -9,4 +9,11 @@ public class MapPoint
 
     [Validate<PositiveNumberValidator, int>]
     public int Altitude { get; set; }
+
+    [ValidateParameter(nameof(startingPoint))]
+    public int CalculateDistance(string startingPoint)
+    {
+        //calculate distance between two points
+        return 0;
+    }
 }
